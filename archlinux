@@ -1,0 +1,103 @@
+https://wiki.archlinux.org/index.php/Installation_guide
+
+timedatectl set-ntp true
+timedatectl list-timezones
+timedatectl set-timezone Europe/Kiev
+ln -sf /usr/share/zoneinfo/Zone/SubZone /etc/localtime
+
+loadkeys uk | for example
+find /usr/share/kbd/keymaps -type f | more | grep uk
+
+fdisk /dev/sda > p > n > w | cfdisk optionally
+mkfs.ext4 /dev/sda1
+mkswap /dev/sda2
+
+mount /dev/sda1 /mnt
+swapon /dev/sda2
+
+pacstrap /mnt base linux linux-firmware  (base-devel)
+
+genfstab -L /mnt >> /mnt/etc/fstab
+
+arch-chroot /mnt !! arch-chroot
+ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
+hwclock --systohc
+
+##########
+!!! install more packages on first run !!
+##########
+pacman -S vim grub dhcpcd sudo man-db vi openssh tmux htop intel-ucode networkmanager
+systemctl enable NetworkManager
+
+/etc/locale.gen and uncomment
+locale-gen
+LANG=en_IE.UTF-8 >> locale.conf
+sudo localectl set-locale LANG=en_IE.UTF-8
+
+/etc/hostname -> set hostname
+/etc/hosts
+127.0.0.1  localhost
+::1        localhost
+127.0.0.1  myhostname.localdomain	myhostname
+
+passwd for root
+
+pacman -S grub
+grub-install /dev/sdX
+GRUB_CMDLINE_LINUX_DEFAULT="splash" | for verbose boot
+grub-mkconfig -o /boot/grub/grub.cfg
+if ucode was not installed prior grub generation, add manually
+initrd	/boot/intel-ucode.img /boot/initramfs-linux.img
+
+Ctrl+d
+umount -R /mnt
+
+faster mirror:
+pacman -Syy
+pacman -S reflector
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+reflector -c "US" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
+
+network:
+ip link set enp0s3 up
+ip address add 10.10.1.15/24 broadcast + dev enp0s3
+ip route add default via <gateway ip>
+echo "nameserver 1.1.1.1" > /etc/resolv.conf
+or
+systemctl enable dhcpcd@enp0s3.service
+systemctl start dhcpcd@enp0s3.service
+
+user:
+useradd -m <user>
+usermod -aG wheel <user>
+visudo -> %wheel ALL=(ALL) ALL | tom ALL=(ALL) NOPASSWD:ALL
+
+xserver:
+lspci | grep -e VGA 
+pacman -S xorg-server xorg-apps xorg-xinit xterm
+sudo pacman -S xorg xorg-xinit xterm xorg-apps
+cp /etc/X11/xinit/xinitrc ~/.xinitrc
+delete last 5 lines >> add: exec i3
+autostart x on login .bashrc /.zshrc << 
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    startx
+fi
+
+suggestions:
+sudo pacman -S alacritty rofi firefox ranger
+Alacritty A GPU accelerated terminal emulator written in Rust.
+rofi A run dialog similar to dmenu that has additional functionality as an SSH launcher and window switcher.
+firefox The only web browser worth using.
+ranger A terminal based file browser with some cool features implemented in python.
+
+sudo pacman -S i3-gaps i3status	| see tutorial
+#sudo pacman -S mate mate-extra
+#sudo pacman -S lightdm-gtk-greeter lightdm
+#sudo systemctl enable lightdm
+
+startx
+
+https://davidhsmith4.medium.com/installing-arch-linux-a-beginners-guide-part-2-e1300ff2c73b
+
+.config/i3/config
+exec --no-startup-id feh --bg-fill <path-to-image>

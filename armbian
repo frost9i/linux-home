@@ -1,0 +1,44 @@
+# as root
+vim /etc/hostname
+vim /etc/hosts
+
+visudo
+# Examples
+# user ALL=(ALL) NOPASSWD:ALL
+# tom ALL = NOPASSWD: /bin/systemctl restart httpd.service, /bin/kill
+
+armbian-config
+nand-sata-install
+
+# CPU
+vim /etc/default/cpufrequtils
+
+#############
+## Network ##
+nmtui # ui network config
+nmcli # network manager
+
+# Wi-Fi
+nmcli radio wifi off
+
+# Locale
+LC_TIME=C.UTF-8 >> /etc/default/locale
+update-locale LC_TIME="C.UTF-8"
+# set timezone
+dpkg-reconfigure tzdata
+
+# update
+apt update
+apt-get update
+# to fix the issue of outdated updates
+apt-get -o Acquire::Check-Valid-Until=false update
+apt upgrade
+
+# zsh
+autoload -Uz zsh-newuser-install
+zsh-newuser-install -f
+
+# References
+https://www.armbian.com/orange-pi-plus-2e/
+https://docs.armbian.com/User-Guide_Getting-Started/
+https://miniboard.com.ua/p/howto/ustanovka-os-linux-na-orange-pi

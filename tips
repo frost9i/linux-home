@@ -1,0 +1,39 @@
+####################
+## PuTTY vs KiTTY ##
+keyboard settings: "Xterm R6"
+
+##########################
+## Do not forget to use ##
+| grep | grep 
+| less &show_pattern_only
+| sort | uniq
+| head -5
+| tail -10
+|& STDERR to STDOUT
+/dev/null
+
+# after creating a file or directory so it can be searched for
+updatedb
+
+bat vs cat
+find vs locate
+which vs type
+whereis
+
+#########
+## yum ##
+yum provides <command>
+yum provides chfn
+yum install util-linux-user
+
+############
+## python ##
+python -m SimpleHTTPServer 8000
+
+################
+## References ##
+bash cheat sheet
+https://blog.ssdnodes.com/blog/cheatsheet-bash-shortcuts/
+
+i3 reference sheet
+https://i3wm.org/docs/refcard.html

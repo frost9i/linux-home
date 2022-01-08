@@ -1,11 +1,19 @@
+" vim /etc/vim/vimrc
 set number
+" set nonumber
 syntax on
 colorscheme desert
+" delek industry pablo slate blue desert koehler peachpuff tools darkblue elflord morning ron torte default evening murphy shine zellner
+" hi Comment ctermfg=cyan
 
+" Remove highlight after search is done
+" :noh
+
+" spaces instead of tabs
+set et
 set tabstop=4
 set shiftwidth=4
 set smarttab
-set et
 
 set wrap
 
@@ -46,6 +54,5 @@ set makeprg=make
 compiler gcc
 endif
 
-# syntax on
-hi Comment ctermfg=cyan
+
 
